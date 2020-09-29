@@ -25,7 +25,7 @@
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="Mechelle Wang">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/">
@@ -155,11 +155,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/31/graphql-in-postman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mechelle Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/31/graphql-in-postman/" class="post-title-link" itemprop="url">如何测试一个GraphQL的接口</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-31 16:54:00" itemprop="dateCreated datePublished" datetime="2020-08-31T16:54:00+08:00">2020-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-01 21:07:12" itemprop="dateModified" datetime="2020-09-01T21:07:12+08:00">2020-09-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="GraphQL是什么"><a href="#GraphQL是什么" class="headerlink" title="GraphQL是什么"></a>GraphQL是什么</h3><p>GraphQL是一种服务器检索数据的查询语言，和RESTful API、SOAP、gRPC的作用是一样的，但比这些都更加灵活和智能。比如当修改一个接口的URL上的请求参数时，RESTful 需要重新定义、增删改接口，而GraghQL接口无需做任何后端修改。再比如，当前端要求接口只返回需要的字段时，后端只能通过定义各种各样的Model来支持，而GraphQL接口无需做过多的修改，就能够准确地指定响应中返回的数据，不多也不少。再比如，当使用接口获取特定艺术家所有专辑所有曲目的所有标题的列表，则需要发出多个请求，首先查询艺术家ID，然后查找所有唱片集，最后查找每个唱片集上的所有曲目，这些步骤在GraphQL中可以通过一个查询直接访问到所有数据。</p>
+<h3 id="GraphQL查询语句"><a href="#GraphQL查询语句" class="headerlink" title="GraphQL查询语句"></a>GraphQL查询语句</h3><p>在介绍查询语句之前，默认大家已经了解了GraphQL服务构建的四个部分，数据定义（schema）、查询（query）、更改（Mutation）、数据解析（Resolver）。毕竟这篇文章给测试开发人员学习的，所以GraghQL服务不做过多讲解。<br>用一个例子来展示GraphQL定义的查询语句。比如我们要查询某本书籍的相关信息，可以使用下面的GraphQL查询语句：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/31/graphql-in-postman/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/26/Java-Locks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mechelle Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/26/Java-Locks/" class="post-title-link" itemprop="url">Java8 Locks</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-26 19:26:46" itemprop="dateCreated datePublished" datetime="2020-08-26T19:26:46+08:00">2020-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-07 15:16:32" itemprop="dateModified" datetime="2020-09-07T15:16:32+08:00">2020-09-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在Java中，多个线程对共享资源进行访问，可以通过synchronized和锁来实现。synchronized无需显示地获取和释放锁，无需关注锁的释放顺序，当方法或代码块执行结束锁就自动释放了，这样做的好处在于一定程度上减少编程错误。但这样也导致了synchronized不够灵活，有些情况无法满足需求：</p>
+<ul>
+<li>需要实现一个公平锁，locks包下的ReentrantLock支持公平锁的实现</li>
+<li>减少未获得锁的线程的阻塞时间，Lock API中可以通过<code>tryLock()</code>方法减少阻塞时间</li>
+<li>终止处于等待状态的线程，Lock API提供了<code>lockInterruptibly()</code>方法终止处于等待状态的线程</li>
+<li>需要显示的指定锁的释放和获取顺序</li>
+</ul>
+<p>java.util.concurrent.locks包中支持各种各样的基于Lock接口等实现的锁，相比synchronized，锁提供了更灵活的控制操作。这篇博文主要介绍Java8中常用的锁的类型和使用场景。下面这幅图是java.util.concurrent.locks包下常用锁接口及其子类的关系。<br><img src="/images/concurrent-locks.png" alt="java.util.concurrent.locks包下常用锁接口及其子类"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/26/Java-Locks/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/21/Java-Generics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="Mechelle Wang">
       <meta itemprop="description" content="">
     </span>
 
@@ -186,7 +338,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-26 17:25:31" itemprop="dateModified" datetime="2020-08-26T17:25:31+08:00">2020-08-26</time>
+                <time title="Modified: 2020-09-08 16:17:07" itemprop="dateModified" datetime="2020-09-08T16:17:07+08:00">2020-09-08</time>
               </span>
 
           
@@ -201,7 +353,7 @@
 
       
           <p>Java泛型是一种语言特性，允许定义和使用泛型类型和方法。泛型类型或方法与常规的Java类型和方法的不同之处在于泛型类型具有类型参数。</p>
-<h3 id="1-为什么要使用泛型"><a href="#1-为什么要使用泛型" class="headerlink" title="1. 为什么要使用泛型"></a>1. 为什么要使用泛型</h3><p>我们在写代码的时候经常希望一种集合中只包含某种类型的元素，比如包含Integer/String的列表。在原始集合框架中，如果不在集合中做额外的检查则不能拥有同类型的集合。泛型的引入很好的解决了这一类问题，它帮助我们在编译时自动在代码中添加类型检查，只有编译正确的代码才能进入运行，而在运行时则自动擦除类型。</p>
+<h3 id="为什么要使用泛型"><a href="#为什么要使用泛型" class="headerlink" title="为什么要使用泛型"></a>为什么要使用泛型</h3><p>我们在写代码的时候经常希望一种集合中只包含某种类型的元素，比如包含Integer/String的列表。在原始集合框架中，如果不在集合中做额外的检查则不能拥有同类型的集合。泛型的引入很好的解决了这一类问题，它帮助我们在编译时自动在代码中添加类型检查，只有编译正确的代码才能进入运行，而在运行时则自动擦除类型。</p>
 <blockquote>
 <p>通俗地说，泛型强制Java语言中的类型安全性。</p>
 </blockquote>
@@ -210,43 +362,15 @@
 <p>泛型通过在编译时检测到更多的bug来增加代码的稳定性。</p>
 </blockquote>
 <p>第一步我们了解了在Java中为什么要使用泛型，第二步需要了解泛型如何在Java中生效。</p>
-<h3 id="2-泛型在Java中如何生效"><a href="#2-泛型在Java中如何生效" class="headerlink" title="2. 泛型在Java中如何生效"></a>2. 泛型在Java中如何生效</h3><p>泛型有两大特性，一是#类型安全#，保证编译时期的类型安全，防止引起不必要的ClassCastException。二是#类型擦除#，从本质上讲，使用泛型向源代码中添加的任何额外信息都会在字节码生成之前删除。也就是说字节码中使用的是旧的Java代码，这样做的好处是完美的兼容了Java5之前编写的代码。</p>
-<h3 id="3-泛型类型"><a href="#3-泛型类型" class="headerlink" title="3. 泛型类型"></a>3. 泛型类型</h3><h5 id="1-泛型类或接口"><a href="#1-泛型类或接口" class="headerlink" title="1) 泛型类或接口"></a>1) 泛型类或接口</h5><p>一个类使用了一个或者多个类型的变量，则这个类是个泛型类。这些类型的变量称为类型参数。用一个例子来理解：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoClass</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">   <span class="comment">//T stands for &quot;Type&quot;</span></span><br><span class="line">   <span class="keyword">private</span> T t;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T t)</span> </span>&#123; <span class="keyword">this</span>.t = t; &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> t; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用泛型类之后，一方面支持这个类有多种类型参数，另一方面避免发生编译错误。比如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DemoClass&lt;String&gt; instance = <span class="keyword">new</span> DemoClass&lt;String&gt;();</span><br><span class="line">instance.set(<span class="string">&quot;lokesh&quot;</span>);   <span class="comment">//Correct usage</span></span><br><span class="line">instance.set(<span class="number">1</span>);        <span class="comment">//This will raise compile time error</span></span><br></pre></td></tr></table></figure>
-<p>同理接口中使用类似，例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Generic interface definition</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">DemoInterface</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function">T2 <span class="title">doSomeOperation</span><span class="params">(T1 t)</span></span>;</span><br><span class="line">   <span class="function">T1 <span class="title">doReverseOperation</span><span class="params">(T2 t)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//A class implementing generic interface</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoClass</span> <span class="keyword">implements</span> <span class="title">DemoInterface</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> Integer <span class="title">doSomeOperation</span><span class="params">(String t)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="comment">//some code</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">doReverseOperation</span><span class="params">(Integer t)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="comment">//some code</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="2-泛型方法-构造函数"><a href="#2-泛型方法-构造函数" class="headerlink" title="2) 泛型方法/构造函数"></a>2) 泛型方法/构造函数</h5><p>泛型方法/构造函数与泛型类很类似，但泛型方法的类型信息的范围仅限于方法内部，并且其引入了自身的类型参数。</p>
-<h3 id="4-泛型数组"><a href="#4-泛型数组" class="headerlink" title="4. 泛型数组"></a>4. 泛型数组</h3><p>在java中，在运行时将任何不兼容的类型推送到数组中都引发异常，这意味着数组在运行时保留其类型信息，而泛型在运行时会擦除或删除任何类型的信息。所以在java中不允许实例化泛型数组。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// causes compiler error; Cannot create a generic array of T</span></span><br><span class="line"><span class="keyword">public</span> T[] array = <span class="keyword">new</span> T[<span class="number">5</span>];</span><br></pre></td></tr></table></figure>
-<p>数组不支持泛型的另一个原因是数组是协变的，这意味着超类型引用的数组是子类型引用数组的父类型。也就是说，Object[]是String[]的超类型，可以通过Object[]类型的引用变量访问字符串数组。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object[] objArr = <span class="keyword">new</span> String[<span class="number">10</span>];  <span class="comment">// fine</span></span><br><span class="line">objArr[<span class="number">0</span>] = <span class="keyword">new</span> String();</span><br></pre></td></tr></table></figure>
-<h3 id="5-带通配符的泛型"><a href="#5-带通配符的泛型" class="headerlink" title="5. 带通配符的泛型"></a>5. 带通配符的泛型</h3><p>为什么要使用通配符？</p>
-<blockquote>
-<p>通配符用于提示使用者，java泛型所实施的规则，即在使用通配符的任何特定场景中，哪些类型是有效的。</p>
-</blockquote>
-<p>泛型中 <em>?</em> 代表通配符，表示一个未知的类型。通配符的参数化类型是泛型类型的一个实例，表示该泛型类型中至少有一个参数是通配符。通配符可以用于多种情况，比如作为参数、字段、局部变量的类型，或者作为返回类型。但通配符不能作为泛型方法调用、泛型类实例创建、超类的类型参数。<br>泛型用于不同位置的含义也不同：</p>
-<blockquote>
-<p>Collection 表示该集合接口的所有实例化都与类型参数无关；<br>List&lt;? extends Number&gt; 表示元素类型是Number子类型的所有列表类型；<br>Comparator&lt;? super T&gt; 表示类型参数是T的超类的所有Comparator接口的实例化</p>
-</blockquote>
-<p>以下是正确的通配符使用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;?&gt; coll = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;? extends Number&gt; list = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br><span class="line">Pair&lt;String,?&gt; pair = <span class="keyword">new</span> Pair&lt;String,Integer&gt;();</span><br></pre></td></tr></table></figure>
-<p>以下是错误的通配符使用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Number&gt; list = <span class="keyword">new</span> ArrayList&lt;String&gt;();  <span class="comment">//String is not subclass of Number; so error</span></span><br><span class="line">Comparator&lt;? <span class="keyword">super</span> String&gt; cmp = <span class="keyword">new</span> RuleBasedCollator(<span class="keyword">new</span> Integer(<span class="number">100</span>)); <span class="comment">//Integer is not superclass of String</span></span><br></pre></td></tr></table></figure>
-<p>通配符在泛型中可以是有界的也可以是无界的。</p>
-<h5 id="1-无界通配符"><a href="#1-无界通配符" class="headerlink" title="1) 无界通配符"></a>1) 无界通配符</h5><p>所有的参数类型都是无界的通配符类型表示对其类型变量没有任何限制。比如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;?&gt;  list = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br><span class="line">ArrayList&lt;?&gt;  list = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">ArrayList&lt;?&gt;  list = <span class="keyword">new</span> ArrayList&lt;Employee&gt;();</span><br></pre></td></tr></table></figure>
-<h5 id="2-有界通配符"><a href="#2-有界通配符" class="headerlink" title="2) 有界通配符"></a>2) 有界通配符</h5><p>有界通配符对参数的类型做了一些限制，通常使用extends、super限制参数的范围。</p>
-<h6 id="上界通配符"><a href="#上界通配符" class="headerlink" title="上界通配符"></a>上界通配符</h6><p><em>说太多不好理解，直接上代码</em></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsExample</span>&lt;<span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="comment">//List of Integers</span></span><br><span class="line">      List&lt;Integer&gt; ints = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line">      System.out.println(sum(ints));</span><br><span class="line"></span><br><span class="line">      <span class="comment">//List of Doubles</span></span><br><span class="line">      List&lt;Double&gt; doubles = Arrays.asList(<span class="number">1.5d</span>,<span class="number">2d</span>,<span class="number">3d</span>);</span><br><span class="line">      System.out.println(sum(doubles));</span><br><span class="line"></span><br><span class="line">      List&lt;String&gt; strings = Arrays.asList(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;2&quot;</span>);</span><br><span class="line">      <span class="comment">//This will give compilation error as :: The method sum(List&lt;? extends Number&gt;) in the</span></span><br><span class="line">      <span class="comment">//type GenericsExample&lt;T&gt; is not applicable for the arguments (List&lt;String&gt;)</span></span><br><span class="line">      System.out.println(sum(strings));</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//Method will accept</span></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Number <span class="title">sum</span> <span class="params">(List&lt;? extends Number&gt; numbers)</span></span>&#123;</span><br><span class="line">      <span class="keyword">double</span> s = <span class="number">0.0</span>;</span><br><span class="line">      <span class="keyword">for</span> (Number n : numbers)</span><br><span class="line">         s += n.doubleValue();</span><br><span class="line">      <span class="keyword">return</span> s;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h6 id="下界通配符"><a href="#下界通配符" class="headerlink" title="下界通配符"></a>下界通配符</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test.core;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsExample</span>&lt;<span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="comment">//List of grand children</span></span><br><span class="line">      List&lt;GrandChildClass&gt; grandChildren = <span class="keyword">new</span> ArrayList&lt;GrandChildClass&gt;();</span><br><span class="line">      grandChildren.add(<span class="keyword">new</span> GrandChildClass());</span><br><span class="line">      addGrandChildren(grandChildren);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//List of grand childs</span></span><br><span class="line">      List&lt;ChildClass&gt; childs = <span class="keyword">new</span> ArrayList&lt;ChildClass&gt;();</span><br><span class="line">      childs.add(<span class="keyword">new</span> GrandChildClass());</span><br><span class="line">      addGrandChildren(childs);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//List of grand supers</span></span><br><span class="line">      List&lt;SuperClass&gt; supers = <span class="keyword">new</span> ArrayList&lt;SuperClass&gt;();</span><br><span class="line">      supers.add(<span class="keyword">new</span> GrandChildClass());</span><br><span class="line">      addGrandChildren(supers);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addGrandChildren</span><span class="params">(List&lt;? <span class="keyword">super</span> GrandChildClass&gt; grandChildren)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      grandChildren.add(<span class="keyword">new</span> GrandChildClass());</span><br><span class="line">      System.out.println(grandChildren);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SuperClass</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChildClass</span> <span class="keyword">extends</span> <span class="title">SuperClass</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GrandChildClass</span> <span class="keyword">extends</span> <span class="title">ChildClass</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="6-哪些情况不允许使用泛型"><a href="#6-哪些情况不允许使用泛型" class="headerlink" title="6. 哪些情况不允许使用泛型"></a>6. 哪些情况不允许使用泛型</h3><h5 id="1-静态字段不能用泛型"><a href="#1-静态字段不能用泛型" class="headerlink" title="1) 静态字段不能用泛型"></a>1) 静态字段不能用泛型</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsExample</span>&lt;<span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> T member; <span class="comment">//This is not allowed</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="2-不能创建T的实例"><a href="#2-不能创建T的实例" class="headerlink" title="2) 不能创建T的实例"></a>2) 不能创建T的实例</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsExample</span>&lt;<span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">GenericsExample</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">new</span> T();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="3-泛型表达式不接受基本类型"><a href="#3-泛型表达式不接受基本类型" class="headerlink" title="3) 泛型表达式不接受基本类型"></a>3) 泛型表达式不接受基本类型</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> List&lt;<span class="keyword">int</span>&gt; ids = <span class="keyword">new</span> ArrayList&lt;&gt;();    <span class="comment">//Not allowed</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> List&lt;Integer&gt; ids = <span class="keyword">new</span> ArrayList&lt;&gt;(); <span class="comment">//Allowed</span></span><br></pre></td></tr></table></figure>
-<h5 id="4-泛型类不能继承java-lang-Throwable"><a href="#4-泛型类不能继承java-lang-Throwable" class="headerlink" title="4) 泛型类不能继承java.lang.Throwable"></a>4) 泛型类不能继承java.lang.Throwable</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericException</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h5><p><a target="_blank" rel="noopener" href="https://howtodoinjava.com/java/generics/complete-java-generics-tutorial/">https://howtodoinjava.com/java/generics/complete-java-generics-tutorial/</a></p>
-
+<h3 id="泛型在Java中如何生效"><a href="#泛型在Java中如何生效" class="headerlink" title="泛型在Java中如何生效"></a>泛型在Java中如何生效</h3><p>泛型有两大特性，一是<strong>类型安全</strong>，保证编译时期的类型安全，防止引起不必要的ClassCastException。二是<strong>类型擦除</strong>，从本质上讲，使用泛型向源代码中添加的任何额外信息都会在字节码生成之前删除。也就是说字节码中使用的是旧的Java代码，这样做的好处是完美的兼容了Java5之前编写的代码。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/21/Java-Generics/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -269,7 +393,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="Mechelle Wang">
       <meta itemprop="description" content="">
     </span>
 
@@ -389,7 +513,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
+  <p class="site-author-name" itemprop="name">Mechelle Wang</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
@@ -397,14 +521,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -435,7 +559,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">Mechelle Wang</span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>

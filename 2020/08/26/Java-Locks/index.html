@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在Java中，多个线程对共享资源进行访问，可以通过synchronized和锁来实现。synchronized无需显示地获取和释放锁，无需关注锁的释放顺序，当方法或代码块执行结束锁就自动释放了，这样做的好处在于一定程度上减少编程错误。但这样也导致了synchronized不够灵活，有些情况无法满足需求：  需要实现一个公平锁，locks包下的ReentrantLock支持公平锁的实现 减少未获得锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 Locks">
+<meta property="og:url" content="http://yoursite.com/2020/08/26/Java-Locks/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在Java中，多个线程对共享资源进行访问，可以通过synchronized和锁来实现。synchronized无需显示地获取和释放锁，无需关注锁的释放顺序，当方法或代码块执行结束锁就自动释放了，这样做的好处在于一定程度上减少编程错误。但这样也导致了synchronized不够灵活，有些情况无法满足需求：  需要实现一个公平锁，locks包下的ReentrantLock支持公平锁的实现 减少未获得锁">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/concurrent-locks.png">
+<meta property="og:image" content="http://yoursite.com/images/lock.png">
+<meta property="article:published_time" content="2020-08-26T11:26:46.000Z">
+<meta property="article:modified_time" content="2020-09-07T07:16:32.333Z">
+<meta property="article:author" content="Mechelle Wang">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/concurrent-locks.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/26/Java-Locks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java8 Locks | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/26/Java-Locks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mechelle Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java8 Locks
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-26 19:26:46" itemprop="dateCreated datePublished" datetime="2020-08-26T19:26:46+08:00">2020-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-07 15:16:32" itemprop="dateModified" datetime="2020-09-07T15:16:32+08:00">2020-09-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在Java中，多个线程对共享资源进行访问，可以通过synchronized和锁来实现。synchronized无需显示地获取和释放锁，无需关注锁的释放顺序，当方法或代码块执行结束锁就自动释放了，这样做的好处在于一定程度上减少编程错误。但这样也导致了synchronized不够灵活，有些情况无法满足需求：</p>
+<ul>
+<li>需要实现一个公平锁，locks包下的ReentrantLock支持公平锁的实现</li>
+<li>减少未获得锁的线程的阻塞时间，Lock API中可以通过<code>tryLock()</code>方法减少阻塞时间</li>
+<li>终止处于等待状态的线程，Lock API提供了<code>lockInterruptibly()</code>方法终止处于等待状态的线程</li>
+<li>需要显示的指定锁的释放和获取顺序</li>
+</ul>
+<p>java.util.concurrent.locks包中支持各种各样的基于Lock接口等实现的锁，相比synchronized，锁提供了更灵活的控制操作。这篇博文主要介绍Java8中常用的锁的类型和使用场景。下面这幅图是java.util.concurrent.locks包下常用锁接口及其子类的关系。<br><img src="/images/concurrent-locks.png" alt="java.util.concurrent.locks包下常用锁接口及其子类"></p>
+<a id="more"></a>
+<h2 id="一些特性"><a href="#一些特性" class="headerlink" title="一些特性"></a>一些特性</h2><blockquote>
+<p>Java中往往是按照是否含有某一特性来定义锁，我们通过特性将锁进行分组归类，再使用对比的方式进行介绍，帮助大家更快捷的理解相关知识。</p>
+</blockquote>
+<p>下面这幅图梳理了根据不同特性定义的锁，本文介绍的所有锁都来自Lock和ReadWriteLock的子类。<br><img src="/images/lock.png"></p>
+<h3 id="悲观锁与乐观锁"><a href="#悲观锁与乐观锁" class="headerlink" title="悲观锁与乐观锁"></a>悲观锁与乐观锁</h3><p>乐观锁与悲观锁是一种广义上的概念，一种设计思想，体现了看待线程同步的不同角度。</p>
+<h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>对同一个数据的并发操作上，<strong>悲观锁</strong>认为自己在使用数据时一定有别的线程来修改数据，因此在操作数据（读写操作）前会先加锁，确保数据不会被别的线程修改。此时如果有其他线程试图访问该数据，则只能阻塞等待。Java中，synchronized关键字和Lock的实现类本质上都是悲观锁。</p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p><strong>乐观锁</strong>认为自己在使用数据时不会有别的线程修改数据，所以不会提前加锁，只是在更新数据的时候去判断之前有没有别的线程更新了这个数据。如果这个数据没有被更新，当前线程将自己修改的数据成功写入。如果数据已经被其他线程更新，则报错或重试。乐观锁在Java中是通过使用无锁编程来实现，常见的乐观锁实现机制有两种，版本号机制和CAS（Compare-and-Swap，即比较并交换）算法，比如java.util.concurrent.atomic包下的原子类的操作就通过CAS实现的。</p>
+<h4 id="CAS如何实现"><a href="#CAS如何实现" class="headerlink" title="CAS如何实现"></a>CAS如何实现</h4><p>以AtomicInteger#getAndAdd的方法为例，学习CAS是如何实现的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAdd</span><span class="params">(<span class="keyword">int</span> delta)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, delta);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> var5;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">    &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object o, <span class="keyword">long</span> offset, <span class="keyword">int</span> v1, <span class="keyword">int</span> v2)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>原子类中的<code>getAndAdd</code>方法中实际调用<code>Unsafe#getAndAddInt</code>，该方法循环调用“比较和交换方法”，用来比较对象o中的偏移量处的值v1。判断内存值是否等于v1，如果等于则将v2赋给内存值，否则继续循环判断，直到满足条件。其中<code>compareAndSwapInt</code>方法是借助CPU指令完成，属于原子操作。<br>悲观锁和乐观锁的实现案例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ------------------------- 悲观锁的调用方式 -------------------------</span></span><br><span class="line"><span class="comment">// synchronized</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">testMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 操作同步资源</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ReentrantLock</span></span><br><span class="line"><span class="keyword">private</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock(); <span class="comment">// 需要保证多个线程使用的是同一个锁</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">modifyPublicResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="comment">// 操作同步资源</span></span><br><span class="line">    lock.unlock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------------------------- 乐观锁的调用方式 -------------------------</span></span><br><span class="line"><span class="keyword">private</span> AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger();  <span class="comment">// 需要保证多个线程使用的是同一个AtomicInteger</span></span><br><span class="line">atomicInteger.incrementAndGet(); <span class="comment">//执行自增1</span></span><br></pre></td></tr></table></figure>
+<h3 id="独享锁与共享锁"><a href="#独享锁与共享锁" class="headerlink" title="独享锁与共享锁"></a>独享锁与共享锁</h3><p>一般情况，锁提供对共享资源的独占访问。一次只有一个线程可以获取锁，只有先获取到锁才能对共享资源进行访问，这类的锁就称为独占锁，比如Lock接口下的所有实现类都是独占锁，Synchronized也是对代码块的独占访问。但有一部分锁允许并发地访问共享资源，比如ReadWriteLock。</p>
+<h3 id="可重入锁与非可重入锁"><a href="#可重入锁与非可重入锁" class="headerlink" title="可重入锁与非可重入锁"></a>可重入锁与非可重入锁</h3><h3 id="公平锁与非公平锁"><a href="#公平锁与非公平锁" class="headerlink" title="公平锁与非公平锁"></a>公平锁与非公平锁</h3><h3 id="无锁、偏向锁、轻量级锁与重量级锁"><a href="#无锁、偏向锁、轻量级锁与重量级锁" class="headerlink" title="无锁、偏向锁、轻量级锁与重量级锁"></a>无锁、偏向锁、轻量级锁与重量级锁</h3><h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><h2 id="常用锁介绍"><a href="#常用锁介绍" class="headerlink" title="常用锁介绍"></a>常用锁介绍</h2><h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><blockquote>
+<p>一个可重入的互斥锁，比如ReentrantLock，它具有与使用 synchronized 方法和语句所访问的隐式监视器锁相同的一些基本行为和语义，但功能更强大。</p>
+</blockquote>
+<h4 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h4><p><strong>可重入锁</strong>又名递归锁，是指在同一个线程在外层方法获取锁的时候，再进入该线程的内层方法会自动获取锁（前提锁对象得是同一个对象或者class），不会因为之前已经获取过还没释放而阻塞。ReentrantLock和synchronized都是可重入锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Widget</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法1执行...&quot;</span>);</span><br><span class="line">        doOthers();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doOthers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法2执行...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个例子，同一个线程在调用doOthers()时可以直接获得当前对象的锁，进入doOthers()进行操作。<br>ReentrantLock将由最近成功获得锁，并且还没有释放该锁的线程所拥有。当锁没有被任何一个线程所拥有时，调用lock的线程将成功获取该锁并返回。这句话的含义是同一时间该锁只能被一个线程所拥有，因此ReentrantLock是<strong>互斥锁</strong>，也叫<strong>排他锁</strong>或<strong>独占锁</strong>。<br>除此之外，ReentrantLock还具有悲观、独享、可重入、重量级，以及非公平（默认）和公平（通过配置实现）的锁特性。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a target="_blank" rel="noopener" href="https://tech.meituan.com/2018/11/15/java-lock.html">https://tech.meituan.com/2018/11/15/java-lock.html</a><br><a target="_blank" rel="noopener" href="https://aisia.moe/java6api-cn/java/util/concurrent/locks/ReentrantLock.html">https://aisia.moe/java6api-cn/java/util/concurrent/locks/ReentrantLock.html</a><br><a target="_blank" rel="noopener" href="https://winterbe.com/posts/2015/04/30/java8-concurrency-tutorial-synchronized-locks-examples/">https://winterbe.com/posts/2015/04/30/java8-concurrency-tutorial-synchronized-locks-examples/</a><br><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Lock.html">https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/Lock.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/21/Java-Generics/" rel="prev" title="Java Generics">
+      <i class="fa fa-chevron-left"></i> Java Generics
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/31/graphql-in-postman/" rel="next" title="如何测试一个GraphQL的接口">
+      如何测试一个GraphQL的接口 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E7%89%B9%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">一些特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">1.1.</span> <span class="nav-text">悲观锁与乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">1.1.2.</span> <span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">CAS如何实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E4%BA%AB%E9%94%81%E4%B8%8E%E5%85%B1%E4%BA%AB%E9%94%81"><span class="nav-number">1.2.</span> <span class="nav-text">独享锁与共享锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E4%B8%8E%E9%9D%9E%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="nav-number">1.3.</span> <span class="nav-text">可重入锁与非可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81"><span class="nav-number">1.4.</span> <span class="nav-text">公平锁与非公平锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E3%80%81%E5%81%8F%E5%90%91%E9%94%81%E3%80%81%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E4%B8%8E%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">1.5.</span> <span class="nav-text">无锁、偏向锁、轻量级锁与重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E6%97%8B%E9%94%81"><span class="nav-number">1.6.</span> <span class="nav-text">自旋锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E9%94%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">常用锁介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.1.</span> <span class="nav-text">ReentrantLock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="nav-number">2.1.1.</span> <span class="nav-text">可重入锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mechelle Wang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mechelle Wang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

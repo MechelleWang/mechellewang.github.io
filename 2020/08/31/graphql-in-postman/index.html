@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="GraphQL是什么GraphQL是一种服务器检索数据的查询语言，和RESTful API、SOAP、gRPC的作用是一样的，但比这些都更加灵活和智能。比如当修改一个接口的URL上的请求参数时，RESTful 需要重新定义、增删改接口，而GraghQL接口无需做任何后端修改。再比如，当前端要求接口只返回需要的字段时，后端只能通过定义各种各样的Model来支持，而GraphQL接口无需做过多的修改，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何测试一个GraphQL的接口">
+<meta property="og:url" content="http://yoursite.com/2020/08/31/graphql-in-postman/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="GraphQL是什么GraphQL是一种服务器检索数据的查询语言，和RESTful API、SOAP、gRPC的作用是一样的，但比这些都更加灵活和智能。比如当修改一个接口的URL上的请求参数时，RESTful 需要重新定义、增删改接口，而GraghQL接口无需做任何后端修改。再比如，当前端要求接口只返回需要的字段时，后端只能通过定义各种各样的Model来支持，而GraphQL接口无需做过多的修改，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/graghql1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/graghql2.jpg">
+<meta property="article:published_time" content="2020-08-31T08:54:00.000Z">
+<meta property="article:modified_time" content="2020-09-01T13:07:12.112Z">
+<meta property="article:author" content="Mechelle Wang">
+<meta property="article:tag" content="测试开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/graghql1.jpg">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/31/graphql-in-postman/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>如何测试一个GraphQL的接口 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/31/graphql-in-postman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mechelle Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何测试一个GraphQL的接口
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-31 16:54:00" itemprop="dateCreated datePublished" datetime="2020-08-31T16:54:00+08:00">2020-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-01 21:07:12" itemprop="dateModified" datetime="2020-09-01T21:07:12+08:00">2020-09-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="GraphQL是什么"><a href="#GraphQL是什么" class="headerlink" title="GraphQL是什么"></a>GraphQL是什么</h3><p>GraphQL是一种服务器检索数据的查询语言，和RESTful API、SOAP、gRPC的作用是一样的，但比这些都更加灵活和智能。比如当修改一个接口的URL上的请求参数时，RESTful 需要重新定义、增删改接口，而GraghQL接口无需做任何后端修改。再比如，当前端要求接口只返回需要的字段时，后端只能通过定义各种各样的Model来支持，而GraphQL接口无需做过多的修改，就能够准确地指定响应中返回的数据，不多也不少。再比如，当使用接口获取特定艺术家所有专辑所有曲目的所有标题的列表，则需要发出多个请求，首先查询艺术家ID，然后查找所有唱片集，最后查找每个唱片集上的所有曲目，这些步骤在GraphQL中可以通过一个查询直接访问到所有数据。</p>
+<h3 id="GraphQL查询语句"><a href="#GraphQL查询语句" class="headerlink" title="GraphQL查询语句"></a>GraphQL查询语句</h3><p>在介绍查询语句之前，默认大家已经了解了GraphQL服务构建的四个部分，数据定义（schema）、查询（query）、更改（Mutation）、数据解析（Resolver）。毕竟这篇文章给测试开发人员学习的，所以GraghQL服务不做过多讲解。<br>用一个例子来展示GraphQL定义的查询语句。比如我们要查询某本书籍的相关信息，可以使用下面的GraphQL查询语句：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  bookById(id: &quot;book-1&quot;)&#123;</span><br><span class="line">    id</span><br><span class="line">    name</span><br><span class="line">    pageCount</span><br><span class="line">    author &#123;</span><br><span class="line">      firstName</span><br><span class="line">      lastName</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段语句的意思是，查询一个指定的id的书籍，将其id、名字、页码、作者返回，同时将作者的姓、名返回。<br>GraphQL的响应就是常见的JSON格式，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;bookById&quot;:</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;id&quot;:&quot;book-1&quot;,</span><br><span class="line">    &quot;name&quot;:&quot;Harry Potter and the Philosopher&#39;s Stone&quot;,</span><br><span class="line">    &quot;pageCount&quot;:223,</span><br><span class="line">    &quot;author&quot;: &#123;</span><br><span class="line">      &quot;firstName&quot;:&quot;Joanne&quot;,</span><br><span class="line">      &quot;lastName&quot;:&quot;Rowling&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述查询语句的schema如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123;</span><br><span class="line">  bookById(id: ID): Book</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Book &#123;</span><br><span class="line">  id: ID</span><br><span class="line">  name: String</span><br><span class="line">  pageCount: Int</span><br><span class="line">  author: Author</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Author &#123;</span><br><span class="line">  id: ID</span><br><span class="line">  firstName: String</span><br><span class="line">  lastName: String</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，Query定义了查询方法<code>bookeById</code>，入参为必填字段id，返回值为自定义类型Book。Book类型中定义了四个字段，其中id、name、pageCount字段的类型为GraghQL中的标量，author类型为另一个自定义类型Author。同理，Author类型中也定义了三个字段。<br>schema的作用在于明确了服务端有哪些字段可以用，每个字段的类型和子字段。每次查询时，服务器就会根据schema验证并执行查询。其他GraphQL语法及其服务实现可以查看<a target="_blank" rel="noopener" href="https://www.graphql-java.com/tutorials/getting-started-with-spring-boot/#graphql-java-overview">GraphQL服务的Java实现</a>。</p>
+<h3 id="如何用Postman测试GraphQL服务"><a href="#如何用Postman测试GraphQL服务" class="headerlink" title="如何用Postman测试GraphQL服务"></a>如何用Postman测试GraphQL服务</h3><h4 id="用于测试的GraphQL服务"><a href="#用于测试的GraphQL服务" class="headerlink" title="用于测试的GraphQL服务"></a>用于测试的GraphQL服务</h4><p>本文使用了<a target="_blank" rel="noopener" href="https://github.com/helloworlde/spring-boot-graphql-demo">spring-boot-graghql-demo</a>工程作为GraphQL服务，作为测试对象，该服务提供了关于“博文增删改查”的相关接口，如下：</p>
+<ul>
+<li>接口定义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type Mutation&#123;</span><br><span class="line">    createPost(post: PostInput): Post!</span><br><span class="line">    updatePost(id: ID!, post: PostInput): Post!</span><br><span class="line">    deletePost(id: ID!): String</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+定义三个接口，创建博文、更新博文和删除博文，其中id、post是入参，PostInput表示入参的类型，下文有定义。冒号之后的部分表示接口的返回类型，分别为Post对象和String类型。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Query&#123;</span><br><span class="line">    posts: [Post]</span><br><span class="line">    post(id: ID!): Post</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+这里定义两个查询接口，查询全部博文，和按指定id查询博文。</li>
+<li>对象定义<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">type Post &#123;</span><br><span class="line">    id: ID,</span><br><span class="line">    title: String,</span><br><span class="line">    content: String,</span><br><span class="line">    createDate: String</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+这里定义了Post对象的schema，与Model下的Post对象保持一致。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input PostInput&#123;</span><br><span class="line">    title: String!,</span><br><span class="line">    content: String!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+这里定义了<strong>createPost</strong>和<strong>updatePost</strong>的入参对象的schema。</li>
+</ul>
+<h4 id="测试开始"><a href="#测试开始" class="headerlink" title="测试开始"></a>测试开始</h4><p>测试服务中提供的测试接口，如下<br><code>POST</code> <a target="_blank" rel="noopener" href="http://localhost:8080/graphql">http://localhost:8080/graphql</a></p>
+<h5 id="使用GraphQL进行查询"><a href="#使用GraphQL进行查询" class="headerlink" title="使用GraphQL进行查询"></a>使用GraphQL进行查询</h5><p><img src="/images/graghql1.jpg" alt="graphql in postman"><br>在Query框中输入如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  posts &#123;</span><br><span class="line">    id</span><br><span class="line">    title</span><br><span class="line">    content</span><br><span class="line">    createDate</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="使用GraghQL变量进行查询"><a href="#使用GraghQL变量进行查询" class="headerlink" title="使用GraghQL变量进行查询"></a>使用GraghQL变量进行查询</h5><p><img src="/images/graghql2.jpg" alt="graphql in postman"><br>在Query框中输入如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query post($id: ID!) &#123;</span><br><span class="line">    post(id: $id) &#123;</span><br><span class="line">        id</span><br><span class="line">        title</span><br><span class="line">        content</span><br><span class="line">        createDate</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Variables框中输入如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;id&quot;: &quot;5f4cacaa9fffc2a4191c215d&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时，Postman支持使用Postman中定义的变量，通过&#123;&#123;变量名&#125;&#125;进行使用。</p>
+<h4 id="Postman的API支持GraghQL"><a href="#Postman的API支持GraghQL" class="headerlink" title="Postman的API支持GraghQL"></a>Postman的API支持GraghQL</h4><p>Postman7.2支持创建GraghQL类型的API，生成API之后就可以使用其自动补全和校验格式的功能，只需要在APIs中创建指定GraghQL类型的接口即可。</p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p><a target="_blank" rel="noopener" href="https://www.graphql-java.com/tutorials/getting-started-with-spring-boot/#graphql-java-overview">https://www.graphql-java.com/tutorials/getting-started-with-spring-boot/#graphql-java-overview</a><br><a target="_blank" rel="noopener" href="https://blog.postman.com/postman-v7-2-supports-graphql">https://blog.postman.com/postman-v7-2-supports-graphql</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E5%BC%80%E5%8F%91/" rel="tag"># 测试开发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/26/Java-Locks/" rel="prev" title="Java8 Locks">
+      <i class="fa fa-chevron-left"></i> Java8 Locks
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GraphQL%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">GraphQL是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GraphQL%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.</span> <span class="nav-text">GraphQL查询语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8Postman%E6%B5%8B%E8%AF%95GraphQL%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">如何用Postman测试GraphQL服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E4%BA%8E%E6%B5%8B%E8%AF%95%E7%9A%84GraphQL%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">用于测试的GraphQL服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%BC%80%E5%A7%8B"><span class="nav-number">3.2.</span> <span class="nav-text">测试开始</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8GraphQL%E8%BF%9B%E8%A1%8C%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.2.1.</span> <span class="nav-text">使用GraphQL进行查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8GraghQL%E5%8F%98%E9%87%8F%E8%BF%9B%E8%A1%8C%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用GraghQL变量进行查询</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Postman%E7%9A%84API%E6%94%AF%E6%8C%81GraghQL"><span class="nav-number">3.3.</span> <span class="nav-text">Postman的API支持GraghQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mechelle Wang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mechelle Wang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
